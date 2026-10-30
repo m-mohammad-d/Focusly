@@ -154,7 +154,7 @@ Export your data from Settings & Privacy before updating as a precaution.
 **1. Clone the repository**
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/m-mohammad-d/Focusly.git
 cd Focusly
 ```
 
