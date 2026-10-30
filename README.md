@@ -1,4 +1,4 @@
-# Focus Tracker (Chrome Extension)
+# Focusly (Chrome Extension)
 
 A complete, production-quality, privacy-first website usage tracker and focus manager for Google Chrome (Manifest V3), built with **React 19**, **TypeScript (Strict Mode)**, **Tailwind CSS**, and **Vite**.
 
@@ -9,6 +9,7 @@ Works 100% locally on your machine with zero external network tracking, zero bac
 ## 🌟 Key Features
 
 ### 1. High-Accuracy Website Usage Tracking
+
 - **Timestamp & Event-Driven Engine**: Doesn't rely on fragile JavaScript intervals in the background service worker. Tracks sessions via monotonic timestamp state transitions and commits elapsed time on events.
 - **Chrome Lifecycle Resilient**: Seamlessly handles service worker suspension/reactivation, browser restarts, tab switches, and window minimization.
 - **Sleep & Inactivity Guard**: Automatically clamps gaps larger than 2 minutes caused by system sleep or hibernation.
@@ -18,6 +19,7 @@ Works 100% locally on your machine with zero external network tracking, zero bac
 - **Domain Normalization**: Strips `www.`, handles subdomains cleanly, and ignores internal browser schemes (`chrome://`, `chrome-extension://`, `about:`, `devtools://`, `file://`).
 
 ### 2. Modern Dark-First User Interface
+
 - **Compact Popup (`popup.html`)**:
   - Live tracking status badge (`Active`, `Idle`, `Paused`, `Inactive`).
   - Total browsing time today with day-over-day comparison (`-18% vs yesterday`).
@@ -37,6 +39,7 @@ Works 100% locally on your machine with zero external network tracking, zero bac
   - "Take a 5-minute Break" temporary emergency grace period button, "Open Dashboard", and "Close Tab" buttons.
 
 ### 3. Absolute Privacy Guarantee
+
 - **100% On-Device**: All data is stored in `chrome.storage.local`.
 - **No Analytics / Telemetry**: Zero network requests or telemetry endpoints.
 - **No Browsing History Snooping**: Only domain hostnames and durations are recorded. Page titles, URLs, form values, and passwords are never collected.
@@ -46,7 +49,7 @@ Works 100% locally on your machine with zero external network tracking, zero bac
 ## 📁 Project Structure
 
 ```
-Focus Tracker/
+Focusly/
 ├── public/
 │   ├── manifest.json              # Chrome Manifest V3 configuration
 │   └── icons/                     # Generated extension icons (16, 32, 48, 128px)
@@ -107,6 +110,7 @@ Focus Tracker/
 ## 🚀 Installation & Loading into Chrome
 
 ### Option A: Load Pre-Built Production Build Directly
+
 The production build is already compiled and ready inside the `dist/` directory!
 
 1. Open Google Chrome.
@@ -115,9 +119,9 @@ The production build is already compiled and ready inside the `dist/` directory!
 4. Click the **"Load unpacked"** button in the top-left corner.
 5. Select the `dist/` folder inside this repository:
    ```
-   F:\project\Focus Tracker\dist
+   F:\project\Focusly\dist
    ```
-6. The **Focus Tracker** extension is now installed! Pin it to your Chrome toolbar to test.
+6. The **Focusly** extension is now installed! Pin it to your Chrome toolbar to test.
 
 ---
 
@@ -125,7 +129,7 @@ The production build is already compiled and ready inside the `dist/` directory!
 
 1. Clone or open the project directory:
    ```bash
-   cd "F:\project\Focus Tracker"
+   cd "F:\project\Focusly"
    ```
 2. Install dependencies:
    ```bash
@@ -145,14 +149,14 @@ The production build is already compiled and ready inside the `dist/` directory!
 
 ## 🔒 Permissions Rationale
 
-| Permission | Reason |
-| :--- | :--- |
-| `storage` | Stores your daily browsing logs, website time limits, and blocklists safely on your machine. |
-| `tabs` | Reads the hostname and title of the currently focused tab to accurately record time. |
-| `alarms` | Runs a 1-minute periodic heartbeat flush so time is persisted reliably even across long viewing sessions. |
-| `idle` | Detects when you step away from the keyboard or lock your computer so idle time is never counted. |
-| `notifications` | Displays desktop notifications when you reach 80% or 100% of your configured website limit. |
-| `host_permissions` (`http://*/*`, `https://*/*`) | Allows the extension to inspect active web tabs and redirect restricted tabs to `blocked.html`. |
+| Permission                                       | Reason                                                                                                    |
+| :----------------------------------------------- | :-------------------------------------------------------------------------------------------------------- |
+| `storage`                                        | Stores your daily browsing logs, website time limits, and blocklists safely on your machine.              |
+| `tabs`                                           | Reads the hostname and title of the currently focused tab to accurately record time.                      |
+| `alarms`                                         | Runs a 1-minute periodic heartbeat flush so time is persisted reliably even across long viewing sessions. |
+| `idle`                                           | Detects when you step away from the keyboard or lock your computer so idle time is never counted.         |
+| `notifications`                                  | Displays desktop notifications when you reach 80% or 100% of your configured website limit.               |
+| `host_permissions` (`http://*/*`, `https://*/*`) | Allows the extension to inspect active web tabs and redirect restricted tabs to `blocked.html`.           |
 
 ---
 
@@ -160,7 +164,7 @@ The production build is already compiled and ready inside the `dist/` directory!
 
 1. **Verify Tracking Accuracy**:
    - Open any website (e.g. `youtube.com` or `reddit.com`).
-   - Click the Focus Tracker icon in the Chrome toolbar.
+   - Click the Focusly icon in the Chrome toolbar.
    - Observe the live tracking badge: it displays **"Active"** with the current domain and seconds accumulating in real time.
    - Switch to another tab: the previous domain flushes its time, and the new domain starts tracking.
    - Minimize Chrome or switch to another desktop app: the status transitions to **"Inactive"** and time ceases counting.

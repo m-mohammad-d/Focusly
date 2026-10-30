@@ -120,7 +120,7 @@ export const PopupApp: React.FC = () => {
             </div>
             <div>
               <h1 className="text-sm font-bold tracking-tight text-white flex items-center gap-1.5">
-                Focus Tracker
+                Focusly
               </h1>
               <p className="text-[10px] text-gray-400 font-medium">Local & Private</p>
             </div>

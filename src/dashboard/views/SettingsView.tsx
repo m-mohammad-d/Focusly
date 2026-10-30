@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Shield,
   Download,
@@ -8,11 +8,11 @@ import {
   Eye,
   AlertOctagon,
   CheckCircle,
-} from 'lucide-react';
-import { UserSettings } from '../../types/settings';
-import { storage } from '../../storage/chromeStorage';
-import { Button } from '../../components/Button';
-import { Modal } from '../../components/Modal';
+} from "lucide-react";
+import { UserSettings } from "../../types/settings";
+import { storage } from "../../storage/chromeStorage";
+import { Button } from "../../components/Button";
+import { Modal } from "../../components/Modal";
 
 interface SettingsViewProps {
   settings: UserSettings;
@@ -31,22 +31,28 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
 
   const handleToggleTracking = async (enabled: boolean) => {
     chrome.runtime.sendMessage(
-      { type: 'TOGGLE_TRACKING', payload: { enabled } },
+      { type: "TOGGLE_TRACKING", payload: { enabled } },
       async () => {
-        const updated = await storage.saveSettings({ trackingEnabled: enabled });
+        const updated = await storage.saveSettings({
+          trackingEnabled: enabled,
+        });
         onSettingsUpdated(updated);
-      }
+      },
     );
   };
 
   const handleToggleNotifications = async (enabled: boolean) => {
-    const updated = await storage.saveSettings({ notificationsEnabled: enabled });
+    const updated = await storage.saveSettings({
+      notificationsEnabled: enabled,
+    });
     onSettingsUpdated(updated);
   };
 
   const handleIdleThresholdChange = async (seconds: number) => {
-    const updated = await storage.saveSettings({ idleThresholdSeconds: seconds });
-    if (typeof chrome !== 'undefined' && chrome.idle) {
+    const updated = await storage.saveSettings({
+      idleThresholdSeconds: seconds,
+    });
+    if (typeof chrome !== "undefined" && chrome.idle) {
       chrome.idle.setDetectionInterval(seconds);
     }
     onSettingsUpdated(updated);
@@ -56,15 +62,15 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     setIsExporting(true);
     try {
       const json = await storage.exportData();
-      const blob = new Blob([json], { type: 'application/json' });
+      const blob = new Blob([json], { type: "application/json" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `focus_tracker_backup_${new Date().toISOString().slice(0, 10)}.json`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
-      console.error('Export error:', e);
+      console.error("Export error:", e);
     } finally {
       setIsExporting(false);
     }
@@ -78,16 +84,16 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
       const text = await file.text();
       const success = await storage.importData(text);
       if (success) {
-        setImportStatus('Data successfully imported!');
+        setImportStatus("Data successfully imported!");
         setTimeout(() => {
           setImportStatus(null);
           onDataReset();
         }, 1500);
       } else {
-        setImportStatus('Invalid backup file format.');
+        setImportStatus("Invalid backup file format.");
       }
     } catch {
-      setImportStatus('Failed reading import file.');
+      setImportStatus("Failed reading import file.");
     }
   };
 
@@ -101,7 +107,9 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
     <div className="space-y-8 animate-in fade-in duration-200">
       {/* Top Header */}
       <div className="pb-2 border-b border-gray-800/80">
-        <h2 className="text-xl font-black text-white tracking-tight">Settings & Privacy</h2>
+        <h2 className="text-xl font-black text-white tracking-tight">
+          Settings & Privacy
+        </h2>
         <p className="text-xs text-gray-400 mt-0.5">
           Manage your tracking preferences, permissions, and data integrity
         </p>
@@ -114,10 +122,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <span>100% Local & Privacy-First Architecture</span>
         </div>
         <p className="text-xs text-gray-300 leading-relaxed max-w-2xl">
-          Focus Tracker operates completely on your machine. Your browsing activity never leaves
-          your browser. No user accounts, no cloud sync, no tracking telemetry, and no cookies or
-          passwords collected. Only domain hostnames and durations are logged locally in{' '}
-          <code className="text-indigo-400 font-mono">chrome.storage.local</code>.
+          Focusly operates completely on your machine. Your browsing activity
+          never leaves your browser. No user accounts, no cloud sync, no
+          tracking telemetry, and no cookies or passwords collected. Only domain
+          hostnames and durations are logged locally in{" "}
+          <code className="text-indigo-400 font-mono">
+            chrome.storage.local
+          </code>
+          .
         </p>
       </div>
 
@@ -132,7 +144,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               Enable Website Tracking
             </span>
             <span className="text-[11px] text-gray-400">
-              When disabled, time recording will pause immediately across all tabs
+              When disabled, time recording will pause immediately across all
+              tabs
             </span>
           </div>
           <label className="relative inline-flex items-center cursor-pointer">
@@ -153,7 +166,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
               Idle Inactivity Threshold
             </span>
             <span className="text-[11px] text-gray-400">
-              Pause tracking when there is no mouse or keyboard input for this duration
+              Pause tracking when there is no mouse or keyboard input for this
+              duration
             </span>
           </div>
 
@@ -181,7 +195,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
                 Chrome Desktop Notifications
               </span>
               <span className="text-[11px] text-gray-400">
-                Receive alerts when approaching (80%) or reaching (100%) your time limits
+                Receive alerts when approaching (80%) or reaching (100%) your
+                time limits
               </span>
             </div>
           </div>
@@ -208,25 +223,29 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <div className="p-3 rounded-xl bg-gray-950/60 border border-gray-800 space-y-1">
             <strong className="text-indigo-400 block font-mono">storage</strong>
             <p className="text-gray-400">
-              Persists your daily usage logs, custom time limits, and blocklists safely inside Chrome's local database.
+              Persists your daily usage logs, custom time limits, and blocklists
+              safely inside Chrome's local database.
             </p>
           </div>
           <div className="p-3 rounded-xl bg-gray-950/60 border border-gray-800 space-y-1">
             <strong className="text-indigo-400 block font-mono">tabs</strong>
             <p className="text-gray-400">
-              Queries the hostname and title of the active tab to know which website to record time for.
+              Queries the hostname and title of the active tab to know which
+              website to record time for.
             </p>
           </div>
           <div className="p-3 rounded-xl bg-gray-950/60 border border-gray-800 space-y-1">
             <strong className="text-indigo-400 block font-mono">alarms</strong>
             <p className="text-gray-400">
-              Schedules periodic 1-minute heartbeats to ensure time is persisted even during uninterrupted browsing sessions.
+              Schedules periodic 1-minute heartbeats to ensure time is persisted
+              even during uninterrupted browsing sessions.
             </p>
           </div>
           <div className="p-3 rounded-xl bg-gray-950/60 border border-gray-800 space-y-1">
             <strong className="text-indigo-400 block font-mono">idle</strong>
             <p className="text-gray-400">
-              Detects when you step away from your keyboard or lock your machine so idle time is never counted.
+              Detects when you step away from your keyboard or lock your machine
+              so idle time is never counted.
             </p>
           </div>
         </div>
@@ -302,8 +321,8 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-start gap-3">
             <AlertOctagon size={20} className="text-rose-400 shrink-0 mt-0.5" />
             <div className="text-xs text-rose-300 leading-relaxed">
-              Are you sure you want to delete all browsing history, time limits, and configuration?
-              You may want to export a backup first.
+              Are you sure you want to delete all browsing history, time limits,
+              and configuration? You may want to export a backup first.
             </div>
           </div>
 
@@ -315,11 +334,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
             >
               Cancel
             </Button>
-            <Button
-              variant="danger"
-              size="md"
-              onClick={handleConfirmClearAll}
-            >
+            <Button variant="danger" size="md" onClick={handleConfirmClearAll}>
               Yes, Delete Everything
             </Button>
           </div>

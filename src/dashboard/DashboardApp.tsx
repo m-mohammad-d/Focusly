@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Clock,
   LayoutDashboard,
@@ -7,21 +7,28 @@ import {
   Shield,
   Settings,
   Sparkles,
-} from 'lucide-react';
-import { DailyRecord } from '../types/tracking';
-import { UserSettings, TimeLimit, BlockedItem } from '../types/settings';
-import { storage } from '../storage/chromeStorage';
-import { OverviewView } from './views/OverviewView';
-import { StatsView } from './views/StatsView';
-import { LimitsView } from './views/LimitsView';
-import { BlocklistView } from './views/BlocklistView';
-import { SettingsView } from './views/SettingsView';
+} from "lucide-react";
+import { DailyRecord } from "../types/tracking";
+import { UserSettings, TimeLimit, BlockedItem } from "../types/settings";
+import { storage } from "../storage/chromeStorage";
+import { OverviewView } from "./views/OverviewView";
+import { StatsView } from "./views/StatsView";
+import { LimitsView } from "./views/LimitsView";
+import { BlocklistView } from "./views/BlocklistView";
+import { SettingsView } from "./views/SettingsView";
 
-export type DashboardTab = 'overview' | 'stats' | 'limits' | 'blocklist' | 'settings';
+export type DashboardTab =
+  | "overview"
+  | "stats"
+  | "limits"
+  | "blocklist"
+  | "settings";
 
 export const DashboardApp: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
-  const [prefilledDomain, setPrefilledDomain] = useState<string | undefined>(undefined);
+  const [activeTab, setActiveTab] = useState<DashboardTab>("overview");
+  const [prefilledDomain, setPrefilledDomain] = useState<string | undefined>(
+    undefined,
+  );
 
   const [records, setRecords] = useState<Record<string, DailyRecord>>({});
   const [settings, setSettings] = useState<UserSettings | null>(null);
@@ -32,21 +39,22 @@ export const DashboardApp: React.FC = () => {
   const loadAllData = async () => {
     try {
       // Ask background to flush latest time
-      chrome.runtime.sendMessage({ type: 'FLUSH_TIME' });
+      chrome.runtime.sendMessage({ type: "FLUSH_TIME" });
 
-      const [allRecords, userSettings, timeLimits, blocklistItems] = await Promise.all([
-        storage.getAllDailyRecords(),
-        storage.getSettings(),
-        storage.getTimeLimits(),
-        storage.getBlocklist(),
-      ]);
+      const [allRecords, userSettings, timeLimits, blocklistItems] =
+        await Promise.all([
+          storage.getAllDailyRecords(),
+          storage.getSettings(),
+          storage.getTimeLimits(),
+          storage.getBlocklist(),
+        ]);
 
       setRecords(allRecords);
       setSettings(userSettings);
       setLimits(timeLimits);
       setBlocklist(blocklistItems);
     } catch (e) {
-      console.warn('Dashboard data fetch error:', e);
+      console.warn("Dashboard data fetch error:", e);
     } finally {
       setIsLoading(false);
     }
@@ -55,8 +63,13 @@ export const DashboardApp: React.FC = () => {
   useEffect(() => {
     // Check URL search params for initial tab
     const params = new URLSearchParams(window.location.search);
-    const viewParam = params.get('view') as DashboardTab | null;
-    if (viewParam && ['overview', 'stats', 'limits', 'blocklist', 'settings'].includes(viewParam)) {
+    const viewParam = params.get("view") as DashboardTab | null;
+    if (
+      viewParam &&
+      ["overview", "stats", "limits", "blocklist", "settings"].includes(
+        viewParam,
+      )
+    ) {
       setActiveTab(viewParam);
     }
 
@@ -76,11 +89,15 @@ export const DashboardApp: React.FC = () => {
   };
 
   const navItems = [
-    { id: 'overview', label: 'Overview', icon: <LayoutDashboard size={18} /> },
-    { id: 'stats', label: 'Website Statistics', icon: <BarChart3 size={18} /> },
-    { id: 'limits', label: 'Time Limits', icon: <Sliders size={18} /> },
-    { id: 'blocklist', label: 'Blocklist', icon: <Shield size={18} /> },
-    { id: 'settings', label: 'Settings & Privacy', icon: <Settings size={18} /> },
+    { id: "overview", label: "Overview", icon: <LayoutDashboard size={18} /> },
+    { id: "stats", label: "Website Statistics", icon: <BarChart3 size={18} /> },
+    { id: "limits", label: "Time Limits", icon: <Sliders size={18} /> },
+    { id: "blocklist", label: "Blocklist", icon: <Shield size={18} /> },
+    {
+      id: "settings",
+      label: "Settings & Privacy",
+      icon: <Settings size={18} />,
+    },
   ];
 
   if (isLoading || !settings) {
@@ -88,7 +105,7 @@ export const DashboardApp: React.FC = () => {
       <div className="min-h-screen bg-[#0a0e17] flex items-center justify-center text-gray-400">
         <div className="flex flex-col items-center gap-3">
           <div className="w-10 h-10 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm font-medium">Loading Focus Tracker...</span>
+          <span className="text-sm font-medium">Loading Focusly...</span>
         </div>
       </div>
     );
@@ -106,9 +123,11 @@ export const DashboardApp: React.FC = () => {
             </div>
             <div>
               <h1 className="text-base font-black tracking-tight text-white flex items-center gap-1.5">
-                Focus Tracker
+                Focusly
               </h1>
-              <p className="text-[11px] text-gray-400 font-medium">Private Dashboard</p>
+              <p className="text-[11px] text-gray-400 font-medium">
+                Private Dashboard
+              </p>
             </div>
           </div>
 
@@ -125,11 +144,13 @@ export const DashboardApp: React.FC = () => {
                   }}
                   className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30 shadow-sm'
-                      : 'text-gray-400 hover:text-gray-200 hover:bg-gray-900/60'
+                      ? "bg-indigo-600/15 text-indigo-400 border border-indigo-500/30 shadow-sm"
+                      : "text-gray-400 hover:text-gray-200 hover:bg-gray-900/60"
                   }`}
                 >
-                  <span className={isActive ? 'text-indigo-400' : 'text-gray-400'}>
+                  <span
+                    className={isActive ? "text-indigo-400" : "text-gray-400"}
+                  >
                     {item.icon}
                   </span>
                   <span>{item.label}</span>
@@ -147,7 +168,8 @@ export const DashboardApp: React.FC = () => {
               <span>Stay Focused</span>
             </div>
             <p className="text-[11px] text-gray-400 leading-relaxed">
-              Track habits without external trackers. All data is kept strictly on your device.
+              Track habits without external trackers. All data is kept strictly
+              on your device.
             </p>
           </div>
         </div>
@@ -155,7 +177,7 @@ export const DashboardApp: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 p-6 md:p-10 max-w-6xl mx-auto w-full">
-        {activeTab === 'overview' && (
+        {activeTab === "overview" && (
           <OverviewView
             records={records}
             settings={settings}
@@ -164,7 +186,7 @@ export const DashboardApp: React.FC = () => {
           />
         )}
 
-        {activeTab === 'stats' && (
+        {activeTab === "stats" && (
           <StatsView
             records={records}
             limits={limits}
@@ -172,7 +194,7 @@ export const DashboardApp: React.FC = () => {
           />
         )}
 
-        {activeTab === 'limits' && (
+        {activeTab === "limits" && (
           <LimitsView
             limits={limits}
             settings={settings}
@@ -183,7 +205,7 @@ export const DashboardApp: React.FC = () => {
           />
         )}
 
-        {activeTab === 'blocklist' && (
+        {activeTab === "blocklist" && (
           <BlocklistView
             blocklist={blocklist}
             settings={settings}
@@ -193,7 +215,7 @@ export const DashboardApp: React.FC = () => {
           />
         )}
 
-        {activeTab === 'settings' && (
+        {activeTab === "settings" && (
           <SettingsView
             settings={settings}
             onSettingsUpdated={setSettings}
